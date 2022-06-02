@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding= "UTF-8" ?>
+<configuration name="MIMX8UD7xxx10" xsi:schemaLocation="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.9 http://mcuxpresso.nxp.com/XSD/mex_configuration_1.9.xsd" uuid="9b6fad8e-cdfa-4923-b804-ac5c34453de9" version="1.9" xmlns="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <common>
+      <processor>MIMX8UD7xxx10</processor>
+      <package>MIMX8UD7DVK10</package>
+      <mcu_data>ksdk2_0</mcu_data>
+      <cores selected="cm33">
+         <core name="Cortex-A35" id="ca35" description=""/>
+         <core name="Cortex-M33" id="cm33" description=""/>
+      </cores>
+      <description></description>
+   </common>
+   <preferences>
+      <validate_boot_init_only>true</validate_boot_init_only>
+      <generate_extended_information>false</generate_extended_information>
+      <generate_code_modified_registers_only>false</generate_code_modified_registers_only>
+   </preferences>
+   <tools>
+      <pins name="Pins" version="9.0" enabled="true" update_project_code="true">
+         <pins_profile>
+            <processor_version>0.0.0</processor_version>
+            <power_domains/>
+         </pins_profile>
+         <functions_list>
+            <function name="BOARD_InitPins">
+               <description>Configures pin routing and optionally pin electrical features.</description>
+               <options>
+                  <callFromInitBoot>false</callFromInitBoot>
+                  <coreID>cm33</coreID>
+               </options>
+               <dependencies/>
+               <pins>
+                  <pin peripheral="LPUART1" signal="lpuart_tx" pin_num="D2" pin_signal="PTA10">
+                     <pin_features>
+                        <pin_feature name="PS" value="UP"/>
+                        <pin_feature name="PE" value="ENABLED"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="LPUART1" signal="lpuart_rx" pin_num="C1" pin_signal="PTA11">
+                     <pin_features>
+                        <pin_feature name="PS" value="UP"/>
+                        <pin_feature name="PE" value="ENABLED"/>
+                     </pin_features>
+                  </pin>
+               </pins>
+            </function>
+         </functions_list>
+      </pins>
+      <ddr name="DDR" version="1.0" enabled="false" update_project_code="true">
+         <components/>
+      </ddr>
+      <periphs name="Peripherals" version="9.0" enabled="false" update_project_code="true">
+         <peripherals_profile>
+            <processor_version>N/A</processor_version>
+         </peripherals_profile>
+         <functional_groups/>
+         <components/>
+      </periphs>
+   </tools>
+</configuration>
