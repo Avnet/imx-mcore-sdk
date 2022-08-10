@@ -19,6 +19,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "version.h"
+#include "fsl_fusion.h"
 
 #include "fsl_reset.h"
 #include "app_srtm.h"
@@ -191,7 +192,8 @@ int main(void)
 
     UPOWER_PowerOnMemPart(0U, (uint32_t)kUPOWER_MP1_DMA0);
 
-    CLOCK_SetIpSrcDiv(kCLOCK_Tpm0, kCLOCK_Pcc1BusIpSrcCm33Bus, 1U, 0U);
+    Fusion_Init();
+    CLOCK_SetIpSrcDiv(kCLOCK_Tpm3, kCLOCK_FusionTpm3ClkSrcFusionDspBus, 1U, 0U);
     CLOCK_SetIpSrcDiv(kCLOCK_Lpi2c0, kCLOCK_Pcc1BusIpSrcCm33Bus, 0U, 0U);
     CLOCK_SetIpSrcDiv(kCLOCK_Lpi2c1, kCLOCK_Pcc1BusIpSrcCm33Bus, 0U, 0U);
     /* Use Pll1Pfd2Div clock source 12.288MHz. */
@@ -204,11 +206,12 @@ int main(void)
     CLOCK_EnableClock(kCLOCK_RgpioC);
     CLOCK_EnableClock(kCLOCK_Wuu0);
     CLOCK_EnableClock(kCLOCK_Bbnsm);
+    CLOCK_EnableClock(kCLOCK_Tpm3);
 
     RESET_PeripheralReset(kRESET_Sai0);
     RESET_PeripheralReset(kRESET_Lpi2c0);
     RESET_PeripheralReset(kRESET_Lpi2c1);
-    RESET_PeripheralReset(kRESET_Tpm0);
+    RESET_PeripheralReset(kRESET_Tpm3);
 
     APP_SRTM_Init();
 

@@ -614,20 +614,20 @@ void BOARD_InitMipiDsiPins(void)
 #endif /* BOARD_USE_PCA6416A. */
 
 #if defined(BOARD_USE_TPM) && BOARD_USE_TPM
-/* Set TPM0_CH2 to full duty cycle to enable backlight at highest brightness for uboot(running on a35) */
+/* Set TPM3_CH5 to full duty cycle to enable backlight at highest brightness as default */
 void BOARD_EnableMipiDsiBacklight(void)
 {
     tpm_config_t tpmInfo;
     tpm_chnl_pwm_signal_param_t pwmChannelConfig = {
-        .chnlNumber       = (tpm_chnl_t)TPM0_CH2,
+        .chnlNumber       = (tpm_chnl_t)TPM3_CH5,
         .level            = kTPM_HighTrue,
         .dutyCyclePercent = FULL_DUTY_CYCLE,
     };
 
     TPM_GetDefaultConfig(&tpmInfo);
-    TPM_Init(TPM0, (void *)&tpmInfo);
-    TPM_SetupPwm(TPM0, (void *)&pwmChannelConfig, 1, kTPM_EdgeAlignedPwm, CLOCK_GetTpmClkFreq(0U), TPM0_CH2_PWM_FREQ);
-    TPM_StartTimer(TPM0, kTPM_SystemClock);
+    TPM_Init(TPM3, (void *)&tpmInfo);
+    TPM_SetupPwm(TPM3, (void *)&pwmChannelConfig, 1, kTPM_EdgeAlignedPwm, CLOCK_GetTpmClkFreq(3U), TPM3_CH5_PWM_FREQ);
+    TPM_StartTimer(TPM3, kTPM_SystemClock);
 }
 #endif /* BOARD_USE_TPM. */
 #endif /* SDK_I2C_BASED_COMPONENT_USED */

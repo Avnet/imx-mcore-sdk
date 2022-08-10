@@ -101,8 +101,10 @@ void BOARD_InitPins(void) {                                /*!< Function assigne
     IOMUXC_SetPinMux(IOMUXC_PTA7_I2S0_TXD0, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PTA7_I2S0_TXD0,
                         IOMUXC_PCR_DSE_MASK);
-    IOMUXC_SetPinMux(IOMUXC_PTA3_TPM0_CH2, 0U);
-    IOMUXC_SetPinConfig(IOMUXC_PTA3_TPM0_CH2,
+
+    /* Backlight PWM PinMux  */
+    IOMUXC_SetPinMux(IOMUXC_PTB13_TPM3_CH5, 0U);
+    IOMUXC_SetPinConfig(IOMUXC_PTB13_TPM3_CH5,
                         IOMUXC_PCR_DSE_MASK);
 
     /* Touchscreen interrupt IO */

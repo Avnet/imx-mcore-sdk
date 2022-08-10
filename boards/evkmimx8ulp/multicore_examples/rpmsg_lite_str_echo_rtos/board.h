@@ -101,8 +101,10 @@
 #define BOARD_PCA6416A_AC_OK           (8U + 5U)
 
 #define TPM0_CH2 (2UL)
+#define TPM3_CH5 (5UL)
 /* 500 Hz */
 #define TPM0_CH2_PWM_FREQ (500UL)
+#define TPM3_CH5_PWM_FREQ (500UL)
 #define FULL_DUTY_CYCLE   (100UL)
 
 /* IT6161(U10) */
