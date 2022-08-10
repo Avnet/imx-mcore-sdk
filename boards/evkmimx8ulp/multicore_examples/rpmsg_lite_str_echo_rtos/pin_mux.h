@@ -29,21 +29,21 @@
 #define BOARD_UART1_TX_LABEL                                          "UART1_TX"   /*!< Label */
 #define BOARD_UART1_TX_NAME                                           "UART1_TX"   /*!< Identifier name */
 
-/* PTA8 (number AC8), I2C0_SCL */
+/* PTA16, I2C0_SCL */
 /* Routed pin properties */
 #define BOARD_I2C0_SCL_PERIPHERAL                                         LPI2C0   /*!< Peripheral name */
 #define BOARD_I2C0_SCL_SIGNAL                                          lpi2c_scl   /*!< Signal name */
-#define BOARD_I2C0_SCL_PIN_NAME                                             PTA8   /*!< Routed pin name */
-#define BOARD_I2C0_SCL_PIN_FUNCTION_ID                    IOMUXC_PTA8_LPI2C0_SCL   /*!< Pin function id */
+#define BOARD_I2C0_SCL_PIN_NAME                                            PTA16   /*!< Routed pin name */
+#define BOARD_I2C0_SCL_PIN_FUNCTION_ID                   IOMUXC_PTA16_LPI2C0_SCL   /*!< Pin function id */
 #define BOARD_I2C0_SCL_LABEL                                          "I2C0_SCL"   /*!< Label */
 #define BOARD_I2C0_SCL_NAME                                           "I2C0_SCL"   /*!< Identifier */
 
-/* PTA9 (number AD8), I2C0_SDA */
+/* PTA17, I2C0_SDA */
 /* Routed pin properties */
 #define BOARD_I2C0_SDA_PERIPHERAL                                         LPI2C0   /*!< Peripheral name */
 #define BOARD_I2C0_SDA_SIGNAL                                          lpi2c_sda   /*!< Signal name */
-#define BOARD_I2C0_SDA_PIN_NAME                                             PTA9   /*!< Routed pin name */
-#define BOARD_I2C0_SDA_PIN_FUNCTION_ID                    IOMUXC_PTA9_LPI2C0_SDA   /*!< Pin function id */
+#define BOARD_I2C0_SDA_PIN_NAME                                            PTA17   /*!< Routed pin name */
+#define BOARD_I2C0_SDA_PIN_FUNCTION_ID                   IOMUXC_PTA17_LPI2C0_SDA   /*!< Pin function id */
 #define BOARD_I2C0_SDA_LABEL                                          "I2C0_SDA"   /*!< Label */
 #define BOARD_I2C0_SDA_NAME                                           "I2C0_SDA"   /*!< Identifier */
 
