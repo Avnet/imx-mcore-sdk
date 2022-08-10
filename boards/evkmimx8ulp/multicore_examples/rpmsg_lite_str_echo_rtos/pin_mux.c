@@ -100,12 +100,9 @@ void BOARD_InitPins(void) {                                /*!< Function assigne
     IOMUXC_SetPinConfig(IOMUXC_PTA3_TPM0_CH2,
                         IOMUXC_PCR_DSE_MASK);
 
+    /* Touchscreen interrupt IO */
     IOMUXC_SetPinMux(IOMUXC_PTA19_PTA19, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PTA19_PTA19,
-                        IOMUXC_PCR_PE_MASK |
-                        IOMUXC_PCR_PS_MASK);
-    IOMUXC_SetPinMux(IOMUXC_PTB5_PTB5, 0U);
-    IOMUXC_SetPinConfig(IOMUXC_PTB5_PTB5,
                         IOMUXC_PCR_PE_MASK |
                         IOMUXC_PCR_PS_MASK);
 
@@ -120,13 +117,6 @@ void BOARD_InitPins(void) {                                /*!< Function assigne
     IOMUXC_SetPinConfig(IOMUXC_PTA6_PTA6,
                         IOMUXC_PCR_PE_MASK |
                         IOMUXC_PCR_PS_MASK);
-
-    IOMUXC_SetPinMux(IOMUXC_PTB12_PTB12, 0U);
-    IOMUXC_SetPinConfig(IOMUXC_PTB12_PTB12,
-                        IOMUXC_PCR_IBE_MASK);
-    IOMUXC_SetPinMux(IOMUXC_PTB13_PTB13, 0U);
-    IOMUXC_SetPinConfig(IOMUXC_PTB13_PTB13,
-                        IOMUXC_PCR_IBE_MASK);
 
     IOMUXC_SetPinMux(IOMUXC_PTB9_PMIC0_MODE0, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PTB9_PMIC0_MODE0,

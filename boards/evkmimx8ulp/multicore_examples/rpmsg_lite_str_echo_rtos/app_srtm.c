@@ -145,20 +145,6 @@ static const uint16_t wuuPins[] = {
     0x010FU, /* WUU_P27 PTB15 */
 };
 
-static const srtm_io_event_t rtdBtn1KeyEvents[] = {
-    SRTM_IoEventNone,        /* SRTM_KeypadEventNone */
-    SRTM_IoEventRisingEdge,  /* SRTM_KeypadEventPress */
-    SRTM_IoEventFallingEdge, /* SRTM_KeypadEventRelease */
-    SRTM_IoEventEitherEdge   /* SRTM_KeypadEventPressOrRelease */
-};
-
-static const srtm_io_event_t rtdBtn2KeyEvents[] = {
-    SRTM_IoEventNone,        /* SRTM_KeypadEventNone */
-    SRTM_IoEventRisingEdge,  /* SRTM_KeypadEventPress */
-    SRTM_IoEventFallingEdge, /* SRTM_KeypadEventRelease */
-    SRTM_IoEventEitherEdge   /* SRTM_KeypadEventPressOrRelease */
-};
-
 static const srtm_io_event_t wuuPinModeEvents[] = {
     SRTM_IoEventNone,        /* kWUU_ExternalPinDisable */
     SRTM_IoEventRisingEdge,  /* kWUU_ExternalPinRisingEdge */
@@ -301,37 +287,6 @@ static uint8_t APP_IO_GetIoIndex(uint16_t ioId)
     return i;
 }
 
-static uint8_t APP_Keypad_GetInputIndex(uint8_t keyIdx)
-{
-    uint8_t i;
-
-    for (i = 0; i < APP_IO_NUM; i++)
-    {
-        if (suspendContext.io.data[i].index == keyIdx)
-        {
-            break;
-        }
-    }
-
-    return i;
-}
-
-static srtm_io_event_t APP_Keypad_GetIoEvent(uint8_t keyIdx, srtm_keypad_event_t event)
-{
-    switch (keyIdx)
-    {
-        case APP_KEYPAD_INDEX_VOL_PLUS:
-            return rtdBtn1KeyEvents[event]; /* Map vol+ to RTD button1 */
-        case APP_KEYPAD_INDEX_VOL_MINUS:
-            return rtdBtn2KeyEvents[event]; /* Map vol- to RTD button2 */
-        default:
-            assert(false);
-            break;
-    }
-
-    return SRTM_IoEventNone;
-}
-
 void APP_PowerOnACore(void)
 {
     UPOWER_PowerOnADInPDMode();
@@ -352,21 +307,6 @@ static void APP_HandleGPIOHander(uint8_t gpioIdx)
     BaseType_t reschedule = pdFALSE;
     RGPIO_Type *gpio      = gpios[gpioIdx];
 
-    if (APP_GPIO_IDX(APP_PIN_IT6161_INT) == gpioIdx &&
-        (1U << APP_PIN_IDX(APP_PIN_IT6161_INT)) & RGPIO_GetPinsInterruptFlags(gpio, APP_GPIO_INT_SEL))
-    {
-        RGPIO_ClearPinsInterruptFlags(gpio, APP_GPIO_INT_SEL, 1U << APP_PIN_IDX(APP_PIN_IT6161_INT));
-        /* Ignore the interrrupt of gpio(set interrupt trigger type of gpio after A35 send command to set interrupt
-         * trigger type) */
-        APP_IO_ConfIEvent(NULL, NULL, APP_PIN_IT6161_INT, SRTM_IoEventNone, false);
-        if ((AD_CurrentMode == AD_PD) && suspendContext.io.data[APP_INPUT_IT6161_INT].wakeup)
-        {
-            /* Wakeup A Core(CA35) when A Core is in Power Down Mode */
-            APP_PowerOnACore();
-        }
-        xTimerStartFromISR(suspendContext.io.data[APP_INPUT_IT6161_INT].timer, &reschedule);
-    }
-
     if (APP_GPIO_IDX(APP_PIN_TOUCH_INT) == gpioIdx &&
         (1U << APP_PIN_IDX(APP_PIN_TOUCH_INT)) & RGPIO_GetPinsInterruptFlags(gpio, APP_GPIO_INT_SEL))
     {
@@ -380,36 +320,6 @@ static void APP_HandleGPIOHander(uint8_t gpioIdx)
             APP_PowerOnACore();
         }
         xTimerStartFromISR(suspendContext.io.data[APP_INPUT_TOUCH_INT].timer, &reschedule);
-    }
-
-    if (APP_GPIO_IDX(APP_PIN_RTD_BTN1) == gpioIdx &&
-        (1U << APP_PIN_IDX(APP_PIN_RTD_BTN1)) & RGPIO_GetPinsInterruptFlags(gpio, APP_GPIO_INT_SEL))
-    {
-        RGPIO_ClearPinsInterruptFlags(gpio, APP_GPIO_INT_SEL, (1U << APP_PIN_IDX(APP_PIN_RTD_BTN1)));
-        RGPIO_SetPinInterruptConfig(gpio, APP_PIN_IDX(APP_PIN_RTD_BTN1), APP_GPIO_INT_SEL,
-                                    kRGPIO_InterruptOrDMADisabled);
-        suspendContext.io.data[APP_INPUT_RTD_BTN1].value = RGPIO_PinRead(gpio, APP_PIN_IDX(APP_PIN_RTD_BTN1));
-        if ((AD_CurrentMode == AD_PD) && suspendContext.io.data[APP_INPUT_RTD_BTN1].wakeup)
-        {
-            /* Wakeup A Core(CA35) when A Core is in Power Down Mode */
-            APP_PowerOnACore();
-        }
-        xTimerStartFromISR(suspendContext.io.data[APP_INPUT_RTD_BTN1].timer, &reschedule);
-    }
-
-    if (APP_GPIO_IDX(APP_PIN_RTD_BTN2) == gpioIdx &&
-        (1U << APP_PIN_IDX(APP_PIN_RTD_BTN2)) & RGPIO_GetPinsInterruptFlags(gpio, APP_GPIO_INT_SEL))
-    {
-        RGPIO_ClearPinsInterruptFlags(gpio, APP_GPIO_INT_SEL, (1U << APP_PIN_IDX(APP_PIN_RTD_BTN2)));
-        RGPIO_SetPinInterruptConfig(gpio, APP_PIN_IDX(APP_PIN_RTD_BTN2), APP_GPIO_INT_SEL,
-                                    kRGPIO_InterruptOrDMADisabled);
-        suspendContext.io.data[APP_INPUT_RTD_BTN2].value = RGPIO_PinRead(gpio, APP_PIN_IDX(APP_PIN_RTD_BTN2));
-        if ((AD_CurrentMode == AD_PD) && suspendContext.io.data[APP_INPUT_RTD_BTN2].wakeup)
-        {
-            /* Wakeup A Core(CA35) when A Core is in Power Down Mode */
-            APP_PowerOnACore();
-        }
-        xTimerStartFromISR(suspendContext.io.data[APP_INPUT_RTD_BTN2].timer, &reschedule);
     }
 
     if (reschedule)
@@ -540,31 +450,22 @@ void BBNSM_IRQHandler(void)
     }
 }
 
-static uint16_t ioIdTable[APP_IO_NUM] = {APP_PIN_RTD_BTN1, APP_PIN_RTD_BTN2, APP_PIN_PTA19, APP_PIN_PTB5, APP_PIN_PTA5, APP_PIN_PTA6};
+static uint16_t ioIdTable[APP_IO_NUM] = {APP_PIN_PTA19, APP_PIN_PTA5, APP_PIN_PTA6};
 
 #define PIN_FUNC_ID_SIZE (5)
 static uint32_t pinFuncId[APP_IO_NUM][PIN_FUNC_ID_SIZE] = {
-    {IOMUXC_PTB13_PTB13},
-    {IOMUXC_PTB12_PTB12},
     {IOMUXC_PTA19_PTA19},
-    {IOMUXC_PTB5_PTB5},
     {IOMUXC_PTA5_PTA5},
     {IOMUXC_PTA6_PTA6},
 };
 
 static uint32_t inputMask[APP_IO_NUM] = {
-    IOMUXC_PCR_IBE_MASK,
-    IOMUXC_PCR_IBE_MASK,
-    IOMUXC_PCR_PE_MASK | IOMUXC_PCR_PS_MASK,
     IOMUXC_PCR_PE_MASK | IOMUXC_PCR_PS_MASK,
     IOMUXC_PCR_PE_MASK | IOMUXC_PCR_PS_MASK,
     IOMUXC_PCR_PE_MASK | IOMUXC_PCR_PS_MASK,
 };
 
 static uint32_t outputMask[APP_IO_NUM] = {
-    IOMUXC_PCR_IBE_MASK,
-    IOMUXC_PCR_IBE_MASK,
-    IOMUXC_PCR_OBE_MASK,
     IOMUXC_PCR_OBE_MASK,
     IOMUXC_PCR_OBE_MASK,
     IOMUXC_PCR_OBE_MASK,
@@ -723,19 +624,6 @@ static srtm_status_t APP_IO_ConfIEvent(
     return APP_IO_ConfInput(inputIdx, event, wakeup);
 }
 
-static srtm_status_t APP_IO_ConfKEvent(
-    srtm_service_t service, srtm_peercore_t core, uint8_t keyIdx, srtm_keypad_event_t event, bool wakeup)
-{
-    uint8_t inputIdx = APP_Keypad_GetInputIndex(keyIdx);
-
-    assert(inputIdx < APP_IO_NUM);
-
-    suspendContext.io.data[inputIdx].event  = APP_Keypad_GetIoEvent(keyIdx, event);
-    suspendContext.io.data[inputIdx].wakeup = wakeup;
-
-    return APP_IO_ConfInput(inputIdx, suspendContext.io.data[inputIdx].event, wakeup);
-}
-
 static void APP_SRTM_PollLinkup(srtm_dispatcher_t dispatcher, void *param1, void *param2)
 {
     if (srtmState == APP_SRTM_StateRun)
@@ -767,57 +655,6 @@ static void APP_LinkupTimerCallback(TimerHandle_t xTimer)
     if (proc)
     {
         SRTM_Dispatcher_PostProc(disp, proc);
-    }
-}
-
-static void APP_VolPlusTimerCallback(TimerHandle_t xTimer)
-{
-    uint8_t gpioIdx = APP_GPIO_IDX(APP_PIN_RTD_BTN1);
-    uint8_t pinIdx  = APP_PIN_IDX(APP_PIN_RTD_BTN1);
-    srtm_keypad_value_t value;
-
-    if (RGPIO_PinRead(gpios[gpioIdx], pinIdx) == suspendContext.io.data[APP_INPUT_RTD_BTN1].value)
-    {
-        value = suspendContext.io.data[APP_INPUT_RTD_BTN1].value ? SRTM_KeypadValueReleased : SRTM_KeypadValuePressed;
-        /* No glitch, a valid user operation */
-        if (AD_CurrentMode == AD_ACT)
-        {
-            /* When A Core(CA35) is running, notify the event to A Core(CA35). */
-            SRTM_KeypadService_NotifyKeypadEvent(keypadService, APP_KEYPAD_INDEX_VOL_PLUS, value);
-        }
-    }
-
-    /* Restore pin detection interrupt */
-    APP_IO_ConfInput(APP_INPUT_RTD_BTN1, suspendContext.io.data[APP_INPUT_RTD_BTN1].event, false);
-}
-
-static void APP_VolMinusTimerCallback(TimerHandle_t xTimer)
-{
-    uint8_t gpioIdx = APP_GPIO_IDX(APP_PIN_RTD_BTN2);
-    uint8_t pinIdx  = APP_PIN_IDX(APP_PIN_RTD_BTN2);
-    srtm_keypad_value_t value;
-
-    if (RGPIO_PinRead(gpios[gpioIdx], pinIdx) == suspendContext.io.data[APP_INPUT_RTD_BTN2].value)
-    {
-        value = suspendContext.io.data[APP_INPUT_RTD_BTN2].value ? SRTM_KeypadValueReleased : SRTM_KeypadValuePressed;
-        /* No glitch, a valid user operation */
-        if (AD_CurrentMode == AD_ACT)
-        {
-            /* When A Core(CA35) is running, notify the event to A Core(CA35). */
-            SRTM_KeypadService_NotifyKeypadEvent(keypadService, APP_KEYPAD_INDEX_VOL_MINUS, value);
-        }
-    }
-
-    /* Restore pin detection interrupt */
-    APP_IO_ConfInput(APP_INPUT_RTD_BTN2, suspendContext.io.data[APP_INPUT_RTD_BTN2].event, false);
-}
-
-static void APP_It6161IntPinTimerCallback(TimerHandle_t xTimer)
-{
-    /* When A Core(CA35) is running, notify the event to A Core(CA35). */
-    if (AD_CurrentMode == AD_ACT)
-    {
-        SRTM_IoService_NotifyInputEvent(ioService, APP_PIN_IT6161_INT);
     }
 }
 
@@ -1096,15 +933,9 @@ static void APP_SRTM_InitIoKeyDevice(void)
 static void APP_SRTM_InitIoKeyService(void)
 {
     /* Init IO structure used in the application. */
-    /* Keypad */
-    suspendContext.io.data[APP_INPUT_RTD_BTN1].index = APP_KEYPAD_INDEX_VOL_PLUS;  /* use RTD BUTTON1 as vol+ button */
-    suspendContext.io.data[APP_INPUT_RTD_BTN2].index = APP_KEYPAD_INDEX_VOL_MINUS; /* use RTD BUTTON2 as vol- button */
 
     /* GPIO ID */
-    suspendContext.io.data[APP_INPUT_RTD_BTN1].ioId = APP_PIN_RTD_BTN1;
-    suspendContext.io.data[APP_INPUT_RTD_BTN2].ioId = APP_PIN_RTD_BTN2;
     suspendContext.io.data[APP_INPUT_PTA19].ioId    = APP_PIN_PTA19;
-    suspendContext.io.data[APP_INPUT_PTB5].ioId     = APP_PIN_PTB5;
     suspendContext.io.data[APP_OUTPUT_PTA5].ioId    = APP_PIN_PTA5;
     suspendContext.io.data[APP_OUTPUT_PTA6].ioId    = APP_PIN_PTA6;
 
@@ -1122,14 +953,11 @@ static void APP_SRTM_InitIoKeyService(void)
 
     ioService = SRTM_IoService_Create();
     SRTM_IoService_RegisterPin(ioService, APP_PIN_PTA19, APP_IO_SetOutput, APP_IO_GetInput, APP_IO_ConfIEvent, NULL);
-    SRTM_IoService_RegisterPin(ioService, APP_PIN_PTB5, APP_IO_SetOutput, APP_IO_GetInput, APP_IO_ConfIEvent, NULL);
     SRTM_IoService_RegisterPin(ioService, APP_PIN_PTA5, APP_IO_SetOutput, APP_IO_GetInput, APP_IO_ConfIEvent, NULL);
     SRTM_IoService_RegisterPin(ioService, APP_PIN_PTA6, APP_IO_SetOutput, APP_IO_GetInput, APP_IO_ConfIEvent, NULL);
     SRTM_Dispatcher_RegisterService(disp, ioService);
 
     keypadService = SRTM_KeypadService_Create();
-    SRTM_KeypadService_RegisterKey(keypadService, APP_KEYPAD_INDEX_VOL_PLUS, APP_IO_ConfKEvent, NULL);
-    SRTM_KeypadService_RegisterKey(keypadService, APP_KEYPAD_INDEX_VOL_MINUS, APP_IO_ConfKEvent, NULL);
     SRTM_Dispatcher_RegisterService(disp, keypadService);
 }
 
@@ -1497,16 +1325,6 @@ void APP_SRTM_Init(void)
         xTimerCreate("Linkup", APP_MS2TICK(APP_LINKUP_TIMER_PERIOD_MS), pdFALSE, NULL, APP_LinkupTimerCallback);
     assert(linkupTimer);
 
-    suspendContext.io.data[APP_INPUT_RTD_BTN1].timer =
-        xTimerCreate("Vol+", APP_MS2TICK(50), pdFALSE, NULL, APP_VolPlusTimerCallback);
-    assert(suspendContext.io.data[APP_INPUT_RTD_BTN1].timer);
-    suspendContext.io.data[APP_INPUT_RTD_BTN2].timer =
-        xTimerCreate("Vol-", APP_MS2TICK(50), pdFALSE, NULL, APP_VolMinusTimerCallback);
-    assert(suspendContext.io.data[APP_INPUT_RTD_BTN2].timer);
-
-    suspendContext.io.data[APP_INPUT_IT6161_INT].timer =
-        xTimerCreate("It6161Int", APP_MS2TICK(50), pdFALSE, NULL, APP_It6161IntPinTimerCallback);
-    assert(suspendContext.io.data[APP_INPUT_IT6161_INT].timer);
     suspendContext.io.data[APP_INPUT_TOUCH_INT].timer =
         xTimerCreate("TouchInt", APP_MS2TICK(50), pdFALSE, NULL, APP_TouchIntPinTimerCallback);
     assert(suspendContext.io.data[APP_INPUT_TOUCH_INT].timer);
