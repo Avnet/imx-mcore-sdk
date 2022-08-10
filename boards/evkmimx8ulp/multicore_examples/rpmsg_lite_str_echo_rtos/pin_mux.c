@@ -54,6 +54,7 @@ BOARD_InitPins:
  *
  * END ****************************************************************************************************************/
 void BOARD_InitPins(void) {                                /*!< Function assigned for the core: Cortex-M4[cm4] */
+    /* UART1 PinMux */
     IOMUXC_SetPinMux(BOARD_UART1_TX_PIN_FUNCTION_ID, 0U);
     IOMUXC_SetPinConfig(BOARD_UART1_TX_PIN_FUNCTION_ID,
                         IOMUXC_PCR_PE_MASK |
@@ -63,6 +64,7 @@ void BOARD_InitPins(void) {                                /*!< Function assigne
                         IOMUXC_PCR_PE_MASK |
                         IOMUXC_PCR_PS_MASK);
 
+    /* I2C0 & I2C1 PinMux */
     IOMUXC_SetPinMux(BOARD_I2C0_SCL_PIN_FUNCTION_ID, 0U);
     IOMUXC_SetPinConfig(BOARD_I2C0_SCL_PIN_FUNCTION_ID,
                         IOMUXC_PCR_ODE_MASK);
@@ -75,13 +77,16 @@ void BOARD_InitPins(void) {                                /*!< Function assigne
     IOMUXC_SetPinMux(BOARD_I2C1_SDA_PIN_FUNCTION_ID, 0U);
     IOMUXC_SetPinConfig(BOARD_I2C1_SDA_PIN_FUNCTION_ID,
                         IOMUXC_PCR_ODE_MASK);
-    /* Add PMIC I2C IOMUX setting */
+
+    /* PMIC I2C PinMux */
     IOMUXC_SetPinMux(IOMUXC_PTB11_PMIC0_SCL, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PTB11_PMIC0_SCL,
                         IOMUXC_PCR_ODE_MASK);
     IOMUXC_SetPinMux(IOMUXC_PTB10_PMIC0_SDA, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PTB10_PMIC0_SDA,
                         IOMUXC_PCR_ODE_MASK);
+
+    /* I2S0 PinMux */
     IOMUXC_SetPinMux(IOMUXC_PTA2_I2S0_RXD0, 0U);
     IOMUXC_SetPinMux(IOMUXC_PTA4_I2S0_MCLK, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PTA4_I2S0_MCLK,
@@ -124,6 +129,7 @@ void BOARD_InitPins(void) {                                /*!< Function assigne
                         IOMUXC_PCR_PE_MASK |
                         IOMUXC_PCR_PS_MASK);
 
+    /* PMIC0_MODE[2:0] PinMux */
     IOMUXC_SetPinMux(IOMUXC_PTB9_PMIC0_MODE0, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PTB9_PMIC0_MODE0,
                         IOMUXC_PCR_PE_MASK |

@@ -13,7 +13,7 @@
  * Definitions
  **********************************************************************************************************************/
 
-/* PTA19 (number AB19), UART1_RX */
+/* PTA11, UART1_RX */
 #define BOARD_UART1_RX_PERIPHERAL                                        LPUART1   /*!< Device name: LPUART1 */
 #define BOARD_UART1_RX_SIGNAL                                          lpuart_rx   /*!< LPUART1 signal: lpuart_rx */
 #define BOARD_UART1_RX_PIN_NAME                                            PTA11   /*!< Pin name */
@@ -21,7 +21,7 @@
 #define BOARD_UART1_RX_LABEL                                          "UART1_RX"   /*!< Label */
 #define BOARD_UART1_RX_NAME                                           "UART1_RX"   /*!< Identifier name */
 
-/* PTA18 (number AC19), UART1_TX */
+/* PTA10, UART1_TX */
 #define BOARD_UART1_TX_PERIPHERAL                                        LPUART1   /*!< Device name: LPUART1 */
 #define BOARD_UART1_TX_SIGNAL                                          lpuart_tx   /*!< LPUART1 signal: lpuart_tx */
 #define BOARD_UART1_TX_PIN_NAME                                            PTA10   /*!< Pin name */
