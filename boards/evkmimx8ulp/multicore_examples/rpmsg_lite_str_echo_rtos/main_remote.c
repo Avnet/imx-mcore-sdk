@@ -18,6 +18,7 @@
 #include "fsl_debug_console.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "version.h"
 
 #include "fsl_reset.h"
 #include "app_srtm.h"
@@ -103,7 +104,7 @@ void app_task(void *param)
     uint32_t size;
 
     /* Print the initial banner */
-    PRINTF("\r\nRPMSG String Echo FreeRTOS RTOS API Demo...\r\n");
+    PRINTF("\r\nRPMSG String Echo FreeRTOS RTOS API Demo (%s) ...\r\n", SDK_VERSION);
 
 #ifdef MCMGR_USED
     uint32_t startupData;
