@@ -540,7 +540,7 @@ void BBNSM_IRQHandler(void)
     }
 }
 
-static uint16_t ioIdTable[APP_IO_NUM] = {APP_PIN_RTD_BTN1, APP_PIN_RTD_BTN2, APP_PIN_PTA19, APP_PIN_PTB5};
+static uint16_t ioIdTable[APP_IO_NUM] = {APP_PIN_RTD_BTN1, APP_PIN_RTD_BTN2, APP_PIN_PTA19, APP_PIN_PTB5, APP_PIN_PTA5, APP_PIN_PTA6};
 
 #define PIN_FUNC_ID_SIZE (5)
 static uint32_t pinFuncId[APP_IO_NUM][PIN_FUNC_ID_SIZE] = {
@@ -548,6 +548,8 @@ static uint32_t pinFuncId[APP_IO_NUM][PIN_FUNC_ID_SIZE] = {
     {IOMUXC_PTB12_PTB12},
     {IOMUXC_PTA19_PTA19},
     {IOMUXC_PTB5_PTB5},
+    {IOMUXC_PTA5_PTA5},
+    {IOMUXC_PTA6_PTA6},
 };
 
 static uint32_t inputMask[APP_IO_NUM] = {
@@ -555,11 +557,15 @@ static uint32_t inputMask[APP_IO_NUM] = {
     IOMUXC_PCR_IBE_MASK,
     IOMUXC_PCR_PE_MASK | IOMUXC_PCR_PS_MASK,
     IOMUXC_PCR_PE_MASK | IOMUXC_PCR_PS_MASK,
+    IOMUXC_PCR_PE_MASK | IOMUXC_PCR_PS_MASK,
+    IOMUXC_PCR_PE_MASK | IOMUXC_PCR_PS_MASK,
 };
 
 static uint32_t outputMask[APP_IO_NUM] = {
     IOMUXC_PCR_IBE_MASK,
     IOMUXC_PCR_IBE_MASK,
+    IOMUXC_PCR_OBE_MASK,
+    IOMUXC_PCR_OBE_MASK,
     IOMUXC_PCR_OBE_MASK,
     IOMUXC_PCR_OBE_MASK,
 };
@@ -1099,6 +1105,8 @@ static void APP_SRTM_InitIoKeyService(void)
     suspendContext.io.data[APP_INPUT_RTD_BTN2].ioId = APP_PIN_RTD_BTN2;
     suspendContext.io.data[APP_INPUT_PTA19].ioId    = APP_PIN_PTA19;
     suspendContext.io.data[APP_INPUT_PTB5].ioId     = APP_PIN_PTB5;
+    suspendContext.io.data[APP_OUTPUT_PTA5].ioId    = APP_PIN_PTA5;
+    suspendContext.io.data[APP_OUTPUT_PTA6].ioId    = APP_PIN_PTA6;
 
     APP_SRTM_InitIoKeyDevice();
 
@@ -1115,6 +1123,8 @@ static void APP_SRTM_InitIoKeyService(void)
     ioService = SRTM_IoService_Create();
     SRTM_IoService_RegisterPin(ioService, APP_PIN_PTA19, APP_IO_SetOutput, APP_IO_GetInput, APP_IO_ConfIEvent, NULL);
     SRTM_IoService_RegisterPin(ioService, APP_PIN_PTB5, APP_IO_SetOutput, APP_IO_GetInput, APP_IO_ConfIEvent, NULL);
+    SRTM_IoService_RegisterPin(ioService, APP_PIN_PTA5, APP_IO_SetOutput, APP_IO_GetInput, APP_IO_ConfIEvent, NULL);
+    SRTM_IoService_RegisterPin(ioService, APP_PIN_PTA6, APP_IO_SetOutput, APP_IO_GetInput, APP_IO_ConfIEvent, NULL);
     SRTM_Dispatcher_RegisterService(disp, ioService);
 
     keypadService = SRTM_KeypadService_Create();

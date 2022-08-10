@@ -109,6 +109,18 @@ void BOARD_InitPins(void) {                                /*!< Function assigne
                         IOMUXC_PCR_PE_MASK |
                         IOMUXC_PCR_PS_MASK);
 
+    /* Touchscreen reset IO */
+    IOMUXC_SetPinMux(IOMUXC_PTA5_PTA5, 0U);
+    IOMUXC_SetPinConfig(IOMUXC_PTA5_PTA5,
+                        IOMUXC_PCR_PE_MASK |
+                        IOMUXC_PCR_PS_MASK);
+
+    /* MIPI-DSI Enable IO */
+    IOMUXC_SetPinMux(IOMUXC_PTA6_PTA6, 0U);
+    IOMUXC_SetPinConfig(IOMUXC_PTA6_PTA6,
+                        IOMUXC_PCR_PE_MASK |
+                        IOMUXC_PCR_PS_MASK);
+
     IOMUXC_SetPinMux(IOMUXC_PTB12_PTB12, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PTB12_PTB12,
                         IOMUXC_PCR_IBE_MASK);

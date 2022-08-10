@@ -24,7 +24,9 @@ enum
     APP_INPUT_IT6161_INT = 2U,
     APP_INPUT_PTB5       = 3U,
     APP_INPUT_TOUCH_INT  = 3U,
-    APP_IO_NUM           = 4U
+    APP_OUTPUT_PTA5      = 4U,
+    APP_OUTPUT_PTA6      = 5U,
+    APP_IO_NUM,
 };
 
 /*
@@ -115,6 +117,8 @@ enum
 #define APP_GPIO_INT_SEL   (kRGPIO_InterruptOutput2)
 #define APP_PIN_PTA19      (0x0013U) /* PTA19 use for it6161(mipi to hdmi converter ic) interrupt */
 #define APP_PIN_IT6161_INT (APP_PIN_PTA19)
+#define APP_PIN_PTA5       (0x0005U) /* PTA5, use for touch reset IO */
+#define APP_PIN_PTA6       (0x0006U) /* PTA6, use for MIPI-DSI enable IO */
 #define APP_PIN_PTB5       (0x0105U) /* PTB5, use for touch interrupt */
 #define APP_PIN_TOUCH_INT  (APP_PIN_PTB5)
 #define APP_PIN_RTD_BTN1   (0x010DU) /* PTB13 */
