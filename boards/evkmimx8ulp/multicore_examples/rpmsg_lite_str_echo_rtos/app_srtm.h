@@ -22,6 +22,7 @@ enum
     APP_INPUT_TOUCH_INT  = 0U,
     APP_OUTPUT_PTA5      = 1U,
     APP_OUTPUT_PTA6      = 2U,
+    APP_OUTPUT_PTC23     = 3U,
     APP_IO_NUM,
 };
 
@@ -115,6 +116,7 @@ enum
 #define APP_PIN_TOUCH_INT  (APP_PIN_PTA19)
 #define APP_PIN_PTA5       (0x0005U) /* PTA5, use for touch reset IO */
 #define APP_PIN_PTA6       (0x0006U) /* PTA6, use for MIPI-DSI enable IO */
+#define APP_PIN_PTC23      (0x0217U) /* PTC23, use for camera power enable IO */
 
 extern int32_t RPMsg_MU0_A_IRQHandler(void);
 

@@ -200,6 +200,7 @@ int main(void)
     CLOCK_EnableClock(kCLOCK_Dma0Ch17);
     CLOCK_EnableClock(kCLOCK_RgpioA);
     CLOCK_EnableClock(kCLOCK_RgpioB);
+    CLOCK_EnableClock(kCLOCK_RgpioC);
     CLOCK_EnableClock(kCLOCK_Wuu0);
     CLOCK_EnableClock(kCLOCK_Bbnsm);
 

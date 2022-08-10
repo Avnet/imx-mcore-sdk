@@ -118,6 +118,12 @@ void BOARD_InitPins(void) {                                /*!< Function assigne
                         IOMUXC_PCR_PE_MASK |
                         IOMUXC_PCR_PS_MASK);
 
+    /* MIPI-CSI2 Power Enable IO */
+    IOMUXC_SetPinMux(IOMUXC_PTC23_PTC23, 0U);
+    IOMUXC_SetPinConfig(IOMUXC_PTC23_PTC23,
+                        IOMUXC_PCR_PE_MASK |
+                        IOMUXC_PCR_PS_MASK);
+
     IOMUXC_SetPinMux(IOMUXC_PTB9_PMIC0_MODE0, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PTB9_PMIC0_MODE0,
                         IOMUXC_PCR_PE_MASK |
